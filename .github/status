@@ -1,0 +1,157 @@
+import React, { useState, useEffect } from 'react';
+import EmployeeStatus from './EmployeeStatus';
+import EmployeeShoutOuts from './EmployeeShoutOuts';
+import EmployeePerformance from './EmployeePerformance';
+import './BragboardDashboard.css';
+
+const BragboardDashboard = () => {
+  const [employees, setEmployees] = useState([]);
+  const [shoutOuts, setShoutOuts] = useState([]);
+  const [activeTab, setActiveTab] = useState('status');
+
+  // Sample data - replace with API calls
+  useEffect(() => {
+    setEmployees([
+      {
+        id: 1,
+        name: 'Sarah Johnson',
+        avatar: 'https://api.example.com/avatars/1.jpg',
+        status: 'ACTIVE',
+        activityLevel: 85,
+        lastActive: '2 minutes ago',
+        department: 'Engineering',
+        tasksCompleted: 12,
+        performanceScore: 92,
+        productivityScore: 88,
+        collaborationScore: 95,
+        engagementScore: 90,
+        projectsCompleted: 5,
+        tasksToDo: 24,
+        goalsMet: 87,
+      },
+      {
+        id: 2,
+        name: 'Mike Chen',
+        avatar: 'https://api.example.com/avatars/2.jpg',
+        status: 'IN_MEETING',
+        activityLevel: 60,
+        lastActive: '15 minutes ago',
+        department: 'Product',
+        tasksCompleted: 8,
+        performanceScore: 85,
+        productivityScore: 82,
+        collaborationScore: 88,
+        engagementScore: 84,
+        projectsCompleted: 4,
+        tasksToDo: 19,
+        goalsMet: 79,
+      },
+      {
+        id: 3,
+        name: 'Emma Davis',
+        avatar: 'https://api.example.com/avatars/3.jpg',
+        status: 'ACTIVE',
+        activityLevel: 78,
+        lastActive: '5 minutes ago',
+        department: 'Design',
+        tasksCompleted: 10,
+        performanceScore: 88,
+        productivityScore: 91,
+        collaborationScore: 92,
+        engagementScore: 89,
+        projectsCompleted: 6,
+        tasksToDo: 22,
+        goalsMet: 93,
+      },
+    ]);
+
+    setShoutOuts([
+      {
+        id: 1,
+        from: 'Sarah Johnson',
+        fromAvatar: 'https://api.example.com/avatars/1.jpg',
+        to: 'Mike Chen',
+        message: 'Fantastic job on the product proposal! Your presentation skills are incredible.',
+        category: 'teamwork',
+        date: 'Today',
+        likes: 12,
+      },
+      {
+        id: 2,
+        from: 'Mike Chen',
+        fromAvatar: 'https://api.example.com/avatars/2.jpg',
+        to: 'Emma Davis',
+        message: 'Emma, your design concepts completely nailed it. Great innovative thinking!',
+        category: 'innovation',
+        date: 'Yesterday',
+        likes: 18,
+      },
+      {
+        id: 3,
+        from: 'Emma Davis',
+        fromAvatar: 'https://api.example.com/avatars/3.jpg',
+        to: 'Team',
+        message: 'Big thanks to everyone who stayed late to help with the launch. Amazing leadership from you all!',
+        category: 'leadership',
+        date: '2 days ago',
+        likes: 25,
+      },
+    ]);
+  }, []);
+
+  return (
+    <div className="bragboard-dashboard">
+      <div className="dashboard-header">
+        <h1>🏆 Bragboard - Employee Recognition</h1>
+        <p className="dashboard-subtitle">Celebrate achievements and foster team engagement</p>
+      </div>
+
+      <div className="dashboard-tabs">
+        <button 
+          className={`tab-btn ${activeTab === 'status' ? 'active' : ''}`}
+          onClick={() => setActiveTab('status')}
+        >
+          👤 Employee Status
+        </button>
+        <button 
+          className={`tab-btn ${activeTab === 'shoutouts' ? 'active' : ''}`}
+          onClick={() => setActiveTab('shoutouts')}
+        >
+          🎉 Shout-Outs
+        </button>
+        <button 
+          className={`tab-btn ${activeTab === 'performance' ? 'active' : ''}`}
+          onClick={() => setActiveTab('performance')}
+        >
+          📊 Performance
+        </button>
+      </div>
+
+      <div className="dashboard-content">
+        {activeTab === 'status' && (
+          <div className="tab-content">
+            <div className="status-grid">
+              {employees.map(emp => (
+                <EmployeeStatus key={emp.id} employee={emp} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'shoutouts' && (
+          <div className="tab-content">
+            <EmployeeShoutOuts shoutOuts={shoutOuts} />
+          </div>
+        )}
+
+        {activeTab === 'performance' && (
+          <div className="tab-content">
+            <EmployeePerformance employees={employees} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default BragboardDashboard;
