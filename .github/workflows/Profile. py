@@ -1,0 +1,53 @@
+import sqlite3
+import hashlib
+
+# Connect to the database
+conn = sqlite3.connect('employee.db')
+cursor = conn.cursor()
+
+# Create table if it doesn't exist
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS employees
+    (id INTEGER PRIMARY KEY, username TEXT, password TEXT, name TEXT, email TEXT, department TEXT, designation TEXT)
+''')
+
+class Employee:
+    def __init__(self, id, username, name, email, department, designation):
+        self.id = id
+        self.username = username
+        self.name = name
+        self.email = email
+        self.department = department
+        self.designation = designation
+
+def view_profile(username):
+    cursor.execute("SELECT * FROM employees WHERE username = ?", (username,))
+    employee_data = cursor.fetchone()
+    if employee_data:
+        employee = Employee(employee_data[0], employee_data[1], employee_data[3], employee_data[4], employee_data[5], employee_data[6])
+        print("Employee Profile:")
+        print(f"Name: {employee.name}")
+        print(f"Email: {employee.email}")
+        print(f"Department: {employee.department}")
+        print(f"Designation: {employee.designation}")
+    else:
+        print("Employee not found")
+
+def update_profile(username):
+    cursor.execute("SELECT * FROM employees WHERE username = ?", (username,))
+    employee_data = cursor.fetchone()
+    if employee_data:
+        print("Enter new details (leave blank to keep current value):")
+        name = input(f"Name ({employee_data[3]}): ") or employee_data[3]
+        email = input(f"Email ({employee_data[4]}): ") or employee_data[4]
+        department = input(f"Department ({employee_data[5]}): ") or employee_data[5]
+        designation = input(f"Designation ({employee_data[6]}): ") or employee_data[6]
+
+        cursor.execute("UPDATE employees SET name = ?, email = ?, department = ?, designation = ? WHERE username = ?",
+                       (name, email, department, designation, username))
+        conn.commit()
+        print("Profile updated successfully!")
+    else:
+        print("Employee not found")
+
+def
