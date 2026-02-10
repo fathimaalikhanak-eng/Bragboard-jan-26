@@ -1,1 +1,55 @@
+import sqlite3
+import hashlib
 
+# Connect to the database
+conn = sqlite3.connect('employee.db')
+cursor = conn.cursor()
+
+# Create table if it doesn't exist
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS employees
+    (id INTEGER PRIMARY KEY, username TEXT, password TEXT, name TEXT)
+''')
+
+def register_employee():
+    username = input("Enter username: ")
+    password = input("Enter password: ")
+    name = input("Enter name: ")
+
+    # Hash the password
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+
+    # Insert into database
+    cursor.execute("INSERT INTO employees (username, password, name) VALUES (?, ?, ?)",
+                   (username, hashed_password, name))
+    conn.commit()
+    print("Employee registered successfully!")
+
+def login_employee():
+    username = input("Enter username: ")
+    password = input("Enter password: ")
+
+    # Hash the password
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+
+    # Query the database
+    cursor.execute("SELECT * FROM employees WHERE username = ? AND password = ?",
+                   (username, hashed_password))
+    employee = cursor.fetchone()
+
+    if employee:
+        print("Login successful!")
+        # Display leaderboard or other functionality
+    else:
+        print("Invalid username or password")
+
+def main():
+    while True:
+        print("1. Register Employee")
+        print("2. Login Employee")
+        print("3. Exit")
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            register_employee()
+        elif choice == "2
