@@ -1,7 +1,5 @@
 import sqlite3
 import hashlib
-
-# Connect to the database
 conn = sqlite3.connect('employee.db')
 cursor = conn.cursor()
 
